@@ -68,7 +68,7 @@ void ForceLJ::setup()
     cutforcesq[i] = cutforce * cutforce;
 }
 
-
+// Version modifiée pour enlever des branchements
 void ForceLJ::compute(Atom &atom, Neighbor &neighbor, Comm &comm, int me)
 {
   eng_vdwl = 0;
@@ -80,14 +80,8 @@ void ForceLJ::compute(Atom &atom, Neighbor &neighbor, Comm &comm, int me)
 
     if(neighbor.halfneigh) {
       if(neighbor.ghost_newton) {
-        if(threads->omp_num_threads > 1)
-          return compute_halfneigh_threaded<1, 1>(atom, neighbor, me);
-        else
           return compute_halfneigh<1, 1>(atom, neighbor, me);
       } else {
-        if(threads->omp_num_threads > 1)
-          return compute_halfneigh_threaded<1, 0>(atom, neighbor, me);
-        else
           return compute_halfneigh<1, 0>(atom, neighbor, me);
       }
     } else return compute_fullneigh<1>(atom, neighbor, me);
@@ -97,18 +91,11 @@ void ForceLJ::compute(Atom &atom, Neighbor &neighbor, Comm &comm, int me)
 
     if(neighbor.halfneigh) {
       if(neighbor.ghost_newton) {
-        if(threads->omp_num_threads > 1)
-          return compute_halfneigh_threaded<0, 1>(atom, neighbor, me);
-        else
           return compute_halfneigh<0, 1>(atom, neighbor, me);
       } else {
-        if(threads->omp_num_threads > 1)
-          return compute_halfneigh_threaded<0, 0>(atom, neighbor, me);
-        else
           return compute_halfneigh<0, 0>(atom, neighbor, me);
       }
     } else return compute_fullneigh<0>(atom, neighbor, me);
-
   }
 }
 
