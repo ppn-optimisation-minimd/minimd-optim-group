@@ -24191,11 +24191,25 @@ void ForceLJ::compute(Atom &atom, Neighbor &neighbor, Comm &comm, int me)
   if(evflag) {
     if(use_oldcompute)
       return compute_original<1>(atom, neighbor, me);
-# 88 "force_lj.cpp"
+
+    if(neighbor.halfneigh) {
+      if(neighbor.ghost_newton) {
+          return compute_halfneigh<1, 1>(atom, neighbor, me);
+      } else {
+          return compute_halfneigh<1, 0>(atom, neighbor, me);
+      }
+    } else return compute_fullneigh<1>(atom, neighbor, me);
   } else {
     if(use_oldcompute)
       return compute_original<0>(atom, neighbor, me);
-# 99 "force_lj.cpp"
+
+    if(neighbor.halfneigh) {
+      if(neighbor.ghost_newton) {
+          return compute_halfneigh<0, 1>(atom, neighbor, me);
+      } else {
+          return compute_halfneigh<0, 0>(atom, neighbor, me);
+      }
+    } else return compute_fullneigh<0>(atom, neighbor, me);
   }
 }
 

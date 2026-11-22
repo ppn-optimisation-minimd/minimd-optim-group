@@ -12,7 +12,7 @@ SIMD ?= yes
 # System-specific settings
 
 CC =		mpicxx
-CCFLAGS =	-Ofast -g -march=native -funroll-loops -fno-inline-functions -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK -fopenmp -DNOCHUNK
+CCFLAGS =	-Ofast -g -march=native -mprefer-vector-width=512  -funroll-loops -fno-inline-functions -fno-omit-frame-pointer -DMPICH_IGNORE_CXX_SEEK -fopenmp -DNOCHUNK
 LINK =		mpicxx 
 LINKFLAGS =	-O3 -fopenmp
 USRLIB = 	
